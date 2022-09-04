@@ -1,14 +1,11 @@
-const Thing = require('../models/Thing');
+const Thing = require('../models/Thing')
 const fs = require('fs');
 
 exports.createThing = (req, res, next) => {
-    console.log(req);
-    console.log(req.body);
-    const thingObject = JSON.parse(req.body.thing);
-    console.log(thingObject);
+    const obj = JSON.parse(JSON.stringify(req.body));
+    const thingObject = JSON.parse(obj.sauce);
     delete thingObject._id;
     delete thingObject._userId;
-    console.log(thingObject);
     const thing = new Thing({
         ...thingObject,
         userId: req.auth.userId,

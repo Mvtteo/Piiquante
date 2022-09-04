@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 
 const path = require('path');
 
-const saucesRoutes = require('./routes/sauces');
-const userRoutes = require('./routes/user');
-
 mongoose.connect('mongodb+srv://Mvtteo:qrcogt9cgDfk6Zj5@cluster0.lkonzgg.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -24,6 +21,9 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(bodyParser.json());
+
+const saucesRoutes = require('./routes/sauces');
+const userRoutes = require('./routes/user');
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
