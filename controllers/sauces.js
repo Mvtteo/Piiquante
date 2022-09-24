@@ -6,6 +6,8 @@ exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
     delete sauceObject._userId;
+    sauceObject.likes = 0;
+    sauceObject.dislikes = 0;
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
@@ -21,7 +23,6 @@ exports.createSauce = (req, res, next) => {
     .findOne({ _id : req.params.id})
     .then((like) => {
         if (!like.usersLiked.includes(req.body.userId) && req.body.like == 1){
-            console.log('les instructions seront executées')
             Sauce.updateOne(
                 {_id : req.params.id},
                     {
@@ -46,7 +47,6 @@ exports.createSauce = (req, res, next) => {
             }
 
         if (!like.usersDisliked.includes(req.body.userId) && req.body.like == -1){
-            console.log('les instructions seront executées')
             Sauce.updateOne(
                 {_id : req.params.id},
                 {
