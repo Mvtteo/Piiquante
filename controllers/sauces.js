@@ -2,12 +2,13 @@ const Sauce = require('../models/Sauce');
 const fs = require('fs');
 const { findOne } = require('../models/Sauce');
 
+
+//controller création de sauce
+
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
     delete sauceObject._userId;
-    sauceObject.likes = 0;
-    sauceObject.dislikes = 0;
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
@@ -17,6 +18,8 @@ exports.createSauce = (req, res, next) => {
     .then(() => { res.status(201).json({message: 'Objet enregistré !'})})
     .catch(error => { res.status(400).json( { error })})
  };
+
+ //controller like d'une sauce
 
  exports.likeSauce = (req, res, next) => {
     Sauce
@@ -77,13 +80,15 @@ exports.createSauce = (req, res, next) => {
 
 
 
-
+//controller affichage d'une seule sauce
 
  exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => res.status(200).json(sauce))
         .catch(error => res.status(404).json({ error }));
     };
+
+//controller modification de la sauce
 
  exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file ? {
@@ -107,6 +112,8 @@ exports.createSauce = (req, res, next) => {
         });
  };
 
+ //controller suppression d'une sauce
+
  exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
@@ -125,6 +132,8 @@ exports.createSauce = (req, res, next) => {
             res.status(500).json({ error });
         });
  };
+
+//controller affichage toutes les sauces
 
 exports.getSauces = (req, res, next) => {
     Sauce.find()

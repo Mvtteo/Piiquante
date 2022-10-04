@@ -1,8 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
+
+//importation du model
 
 const User = require('../models/User');
 
+//controller pour créer un compte, et hashage du mot de passe
 
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 15)
@@ -17,6 +21,8 @@ exports.signup = (req, res, next) => {
     })
     .catch(error => res.status(500).json({ error }));
 };
+
+//controller pour se connecter, vérification du mot de passe et token
 
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
@@ -33,7 +39,7 @@ exports.login = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.token,
                             { expiresIn: '24h' }
                         )
                     });
